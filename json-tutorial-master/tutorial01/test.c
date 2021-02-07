@@ -7,8 +7,33 @@ static int main_ret = 0;
 static int test_count = 0;
 static int test_pass = 0;
 
+/*
+ * 宏的编写技巧：
+ * 当宏里面由多于一条语句时，据需要使用do{}while(0)包裹成为一条语句，否则会出现错误
+ * 如下：
+ *   1）#define M() a(); b()
+ *      if (cond)
+ *          M();
+ *      else
+ *          c();
+ *    预处理后变为：
+ *      if (cond)
+ *          a(); b();
+ *      // else缺乏对应if（分号会表示上面的if语句已经结束）
+ *      else
+ *          c();
+ *   2）#define M() { a(); b(); }
+ *    预处理后变为：
+ *      if (cond)
+ *          { a(); b(); };
+ *      //最后的分号也会代表if语句的结束
+ *      else
+ *          c();
+ * 而使用do while就可以避免这个问题
+ * 这里do while的作用仅限于将语句整合为一个完整的模块，并不用于循环，实际语句仍是顺序执行一次
+ */
 #define EXPECT_EQ_BASE(equality, expect, actual, format) \
-    do {\
+    do {                                                 \
         test_count++;\
         if (equality)\
             test_pass++;\
@@ -17,6 +42,14 @@ static int test_pass = 0;
             main_ret = 1;\
         }\
     } while(0)
+    /*
+     * 两个format作为expect和actual的输出格式字符——输出十进制整数
+     * 前面的一个%s一个%d分别是错误发生的文件名和行号的格式化字符
+     */
+
+    /*
+     * 上面的test_count和test_pass两个计数值分别统计测试程序的执行次数以及测试的通过次数
+     */
 
 #define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, "%d")
 
