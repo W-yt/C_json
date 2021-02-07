@@ -73,7 +73,7 @@ static int lept_parse_false(lept_context* c, lept_value* v) {
 /*
  * 处理Json的值实际值部分
  * 但是这里只处理了null的情况
- * 没有处理true和flase的情况（这是练习部分，我已经自己补全了，并添加了两个类似lept_parse_null的判断函数）
+ * 没有处理true和flase的情况（这是练习部分，我已经自己补全了，并添加了两个类似lept_parse_null的判断函数）（练习3）
  */
 static int lept_parse_value(lept_context* c, lept_value* v) {
     switch (*c->json) {
@@ -95,6 +95,7 @@ static int lept_parse_value(lept_context* c, lept_value* v) {
  */
 int lept_parse(lept_value* v, const char* json) {
     lept_context c;
+    int ret;
     /*
      * 断言
      * 可以输出调试信息
@@ -116,7 +117,22 @@ int lept_parse(lept_value* v, const char* json) {
      * 实际处理Json文本
      * 其间都是用一个lept_context类型的队形c进行数据的传递
      */
-    return lept_parse_value(&c, v);
+    ret = lept_parse_value(&c,v);
+    /*
+     * 如果实际值的处理无异常，则继续判断后面的空白之后是否有其他字符（练习1）
+     */
+    if(ret == LEPT_PARSE_OK)
+    {
+        lept_parse_whitespace(&c);
+        if(*c.json == '\0')
+            ret = LEPT_PARSE_OK;
+        /*
+         * 不是字符串结束标志，则说明有多余的其他字符
+         */
+        else
+            ret = LEPT_PARSE_ROOT_NOT_SINGULAR;
+    }
+    return ret;
 }
 
 lept_type lept_get_type(const lept_value* v) {

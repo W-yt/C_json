@@ -53,6 +53,9 @@ static int test_pass = 0;
 
 #define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, "%d")
 
+/*
+ * 测试解析null
+ */
 static void test_parse_null() {
     lept_value v;
     v.type = LEPT_FALSE;
@@ -60,6 +63,29 @@ static void test_parse_null() {
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
 }
 
+/*
+ * 测试解析true
+ */
+static void test_parse_true() {
+    lept_value v;
+    v.type = LEPT_FALSE;
+    EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, "true"));
+    EXPECT_EQ_INT(LEPT_TRUE, lept_get_type(&v));
+}
+
+/*
+ * 测试解析false
+ */
+static void test_parse_false() {
+    lept_value v;
+    v.type = LEPT_FALSE;
+    EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, "false"));
+    EXPECT_EQ_INT(LEPT_FALSE, lept_get_type(&v));
+}
+
+/*
+ * 测试解析空白
+ */
 static void test_parse_expect_value() {
     lept_value v;
 
@@ -72,6 +98,9 @@ static void test_parse_expect_value() {
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
 }
 
+/*
+ * 测试解析不存在的字符值
+ */
 static void test_parse_invalid_value() {
     lept_value v;
     v.type = LEPT_FALSE;
@@ -83,6 +112,9 @@ static void test_parse_invalid_value() {
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
 }
 
+/*
+ * 测试解析实际值后的空白后还有其他字符
+ */
 static void test_parse_root_not_singular() {
     lept_value v;
     v.type = LEPT_FALSE;
@@ -90,8 +122,13 @@ static void test_parse_root_not_singular() {
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
 }
 
+/*
+ * 测试主程序
+ */
 static void test_parse() {
     test_parse_null();
+    test_parse_true();
+    test_parse_false();
     test_parse_expect_value();
     test_parse_invalid_value();
     test_parse_root_not_singular();
@@ -99,6 +136,9 @@ static void test_parse() {
 
 int main() {
     test_parse();
+    /*
+     * 输出测试结果统计情况
+     */
     printf("%d/%d (%3.2f%%) passed\n", test_pass, test_count, test_pass * 100.0 / test_count);
     return main_ret;
 }

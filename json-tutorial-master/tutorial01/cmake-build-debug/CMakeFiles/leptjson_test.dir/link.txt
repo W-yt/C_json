@@ -1,3 +1,0 @@
-"E:\Clion\Install\CLion 2020.2.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\leptjson_test.dir/objects.a
-E:\Download\MinGW\mingw64\bin\ar.exe cr CMakeFiles\leptjson_test.dir/objects.a @CMakeFiles\leptjson_test.dir\objects1.rsp
-E:\Download\MinGW\mingw64\bin\gcc.exe  -ansi -pedantic -Wall -g   -Wl,--whole-archive CMakeFiles\leptjson_test.dir/objects.a -Wl,--no-whole-archive  -o leptjson_test.exe -Wl,--out-implib,libleptjson_test.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\leptjson_test.dir\linklibs.rsp
